@@ -8,6 +8,9 @@ const createMember = async( req, res = response ) => {
 
     const { user , expertise } = req.body
 
+
+    console.log(req.body)
+
     try {
 
         let member = await Member.findOne( { user: user } )
@@ -18,14 +21,17 @@ const createMember = async( req, res = response ) => {
                 msg: 'El miembro ya existe'
             })
         }   
+
        
-        member = new Member( req.body )
+       
+        member = await  Member.create(req.body)
 /*         member.expertise.map( exp =>  {
             member.expertise.set( 'tool' , exp.tool )
             member.expertise.set( 'score' , exp.score )
         }) */
+
+        console.log(member)
             
-        await member.save()
 
         res.status(201).json({
             ok: true,

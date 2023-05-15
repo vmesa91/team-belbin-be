@@ -16,14 +16,7 @@ const MemberSchema = Schema({
     },
 
     expertise: {
-        type: [ Schema.Types.Map ],
-        of: new Schema({
-            tool: {
-                type: Schema.Types.ObjectId,
-                ref: 'Tool'
-            },
-            score: Number
-        }),
+        type: Schema.Types.Array,
         required: true
     },
 
