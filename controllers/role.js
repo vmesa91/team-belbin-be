@@ -29,8 +29,7 @@ const createRole = async( req, res = response ) => {
             ok: true,
             uid: role.id,
             name: role.name,
-            description: role.description,
-            active: role.active,
+            activation: role.active,
             msg: 'Role creado correctamente'
         })
         

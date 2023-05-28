@@ -27,8 +27,7 @@ const createTool = async( req, res = response ) => {
             ok: true,
             uid: tool.id,
             name: tool.name,
-            description: tool.description,
-            active: tool.active,
+            activation: tool.active,
             msg: 'Herramienta/Tecnología creada correctamente'
         })
         

@@ -35,6 +35,8 @@ const loginUser =  async( req, res = response ) => {
         res.status(200).json({
             ok: true,
             uid: user.id,
+            name: user.name,
+            surname: user.surname,
             email: user.email,
             token,
             msg: 'Login Correcto'
@@ -80,6 +82,8 @@ const createUser = async( req, res = response) => {
             ok: true,
             uid: user.id,
             name: user.name,
+            surname: user.surname,
+            email: user.email,
             token,
             msg: 'Usuario creado correctamente'
         })

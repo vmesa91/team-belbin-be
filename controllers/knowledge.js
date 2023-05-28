@@ -27,8 +27,7 @@ const createKnowledge = async( req, res = response ) => {
             ok: true,
             uid: knowledge.id,
             name: knowledge.name,
-            description: knowledge.description,
-            active: knowledge.active,
+            activation: knowledge.activation,
             msg: 'Conocimiento/ámbito creado correctamente'
         })
         

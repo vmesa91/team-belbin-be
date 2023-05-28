@@ -24,8 +24,7 @@ router.post(
    // 2. Middlewares
    [
       check('name', 'El nombre es obligatorio').not().isEmpty(),
-      check('description', 'La descripción es obligatorio').not().isEmpty(),
-      check('active', 'El campo active tiene que ser un booleano').isBoolean(),
+      check('activation', 'El campo active tiene que ser un booleano').isBoolean(),
       fieldValidator
    ],
    // 3. Controller

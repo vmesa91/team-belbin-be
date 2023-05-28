@@ -8,12 +8,7 @@ const KnowledgeSchema = Schema({
         required: true
     },
 
-    description: {
-        type: String,
-        required: true
-    },
-
-    active: {
+    activation: {
         type: Boolean,
         required: true
     }
