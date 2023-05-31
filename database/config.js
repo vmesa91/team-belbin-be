@@ -10,7 +10,6 @@ const dbConnection = async() => {
 
 
     } catch (error) {
-        console.log(error)
         throw new Error('Error al inicializar la base de datos')
     }
 }

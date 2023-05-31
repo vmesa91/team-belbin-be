@@ -6,10 +6,7 @@ const Member = require('../models/Member')
 // Create Member
 const createMember = async( req, res = response ) => {
 
-    const { user , expertise } = req.body
-
-
-    console.log(req.body)
+    const { user } = req.body
 
     try {
 
@@ -22,13 +19,9 @@ const createMember = async( req, res = response ) => {
             })
         }   
 
-       
-       
-        member = await  Member.create(req.body)
-/*         member.expertise.map( exp =>  {
-            member.expertise.set( 'tool' , exp.tool )
-            member.expertise.set( 'score' , exp.score )
-        }) */
+        console.log(req.body)
+
+        member = await Member.create(req.body)
 
         console.log(member)
             
@@ -57,10 +50,15 @@ const readMember = async( req, res = response ) => {
     const startIndex = (page - 1) * limit
 
     let member = await Member.find().skip(startIndex).limit(limit)
+    .populate('user')
     .populate('profiles','name')
     .populate('knowledges','name active')
     .populate('expertise','tool score')
+    .populate('expertise.tool')
+    .populate('colleagues','user score')
+    .populate('colleagues.user')
 
+    console.log(member)
     res.json({
         ok: true,
         member,
@@ -87,7 +85,7 @@ const readMemberId = async( req, res = response ) => {
         res.json({
             ok: true,
             member,
-            msg: 'El profile fue leído correctamente'
+            msg: 'El miembro fue leído correctamente'
         })
 
     } catch (error) {

@@ -25,7 +25,9 @@ router.post(
       check('user', 'El nombre es obligatorio').not().isEmpty(),
       check('profiles', 'Los perfiles son obligatorios').not().isEmpty(),
       check('expertise', 'La expertise es obligatoria').not().isEmpty(),
+      check('colleagues', 'La red de amigos es obligatoria').not().isEmpty(),
       check('knowledges', 'Los conocimientos/ámbitos son obligatorios').not().isEmpty(),
+      check('belbinRol', 'Los roles de Belbin son obligatorios').not().isEmpty(),
       check('language', 'El lenguaje es obligatorio').not().isEmpty(),
       fieldValidator
    ],

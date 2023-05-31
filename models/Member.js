@@ -15,10 +15,27 @@ const MemberSchema = Schema({
         required: true
     },
 
-    expertise: {
-        type: Schema.Types.Array,
-        required: true
-    },
+    expertise: [{
+        tool: {
+          type: Schema.Types.ObjectId,
+          ref: 'Tool'
+        },
+        score: {
+          type: Number,
+          default: 0
+        }
+      }],
+
+    colleagues: [{
+        user: {
+          type: Schema.Types.ObjectId,
+          ref: 'User'
+        },
+        score: {
+          type: Number,
+          default: 0
+        }
+      }],
 
     knowledges: {
         type: [ Schema.Types.ObjectId ],
@@ -31,7 +48,12 @@ const MemberSchema = Schema({
         required: true
     },
 
-    Team: {
+    belbinRol: {
+        type: [ String ],
+        required: true
+    },
+
+    team: {
         type: Schema.Types.ObjectId,
         ref: 'Team'
     }

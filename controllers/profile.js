@@ -201,7 +201,7 @@ const deleteProfile = async( req, res = response ) => {
         }
 
         // Delete in Members 
-        await Members.updateMany(
+        await Member.updateMany(
             { profiles : profileId },
             { $pull: { profiles: profileId } }
             )
@@ -216,7 +216,7 @@ const deleteProfile = async( req, res = response ) => {
     } catch (error) {
         res.status(500).json({
             ok: false,
-            msg: 'Por favor, hable con el administrador'
+            msg: 'Por favor, hable con el administrador' , error 
         })
     }
 
