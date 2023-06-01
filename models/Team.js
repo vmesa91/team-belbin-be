@@ -12,8 +12,10 @@ const TeamSchema = Schema({
         type: String
     },
 
-    num_members: {
-        type: Number
+    leader: {
+        type: Schema.Types.ObjectId,
+        ref: 'Member',
+        required: true
     },
 
     roles: {

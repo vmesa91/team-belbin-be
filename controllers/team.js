@@ -46,9 +46,12 @@ const readTeams = async( req, res = response ) => {
     const startIndex = (page - 1) * limit
 
     let teams = await Team.find().skip(startIndex).limit(limit)
+    .populate('leader')
     .populate('roles','name active')
     .populate('tools','name active')
     .populate('knowledges','name active')
+    .populate('members')
+
 
     res.json({
         ok: true,

@@ -23,6 +23,7 @@ router.post(
    // 2. Middlewares
    [
       check('name', 'El nombre es obligatorio').not().isEmpty(),
+      check('leader', 'El líder es obligatorio').not().isEmpty(),
       check('roles', 'Los roles son obligatorio').not().isEmpty(),
       check('tools', 'Las herramientas/tecnologías son obligatorias').not().isEmpty(),
       check('knowledges', 'Los conocimientos/ámbitos son obligatorias').not().isEmpty(),
