@@ -50,7 +50,7 @@ const readMember = async( req, res = response ) => {
     const startIndex = (page - 1) * limit
 
     let member = await Member.find().skip(startIndex).limit(limit)
-    .populate('user')
+    .populate('user', ' name surname email title image biography location ')
     .populate('profiles','name')
     .populate('knowledges','name active')
     .populate('expertise','tool score')
