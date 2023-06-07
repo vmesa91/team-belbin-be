@@ -1,12 +1,15 @@
 const { response } = require('express')
 
 const Member = require('../models/Member')
+const Profile = require('../models/Profile')
+const Team = require('../models/Team')
 
 
 // Create Member
 const createMember = async( req, res = response ) => {
 
-    const { user } = req.body
+    const { user , profiles } = req.body
+    console.log(profiles)
 
     try {
 
@@ -19,12 +22,23 @@ const createMember = async( req, res = response ) => {
             })
         }   
 
-        console.log(req.body)
-
         member = await Member.create(req.body)
 
-        console.log(member)
-            
+        // Actualizar los miembros dentro de un perfil
+        Member.findOne(member).populate('profiles')
+       .then( (member) => { 
+            profiles.map( (profileId) => {
+               Profile.findByIdAndUpdate(
+                    profileId,
+                    { $push: { members: member._id } },
+                    { new: true }
+                ).then( updatedProfile => {
+                    console.log('OK', updatedProfile)
+                 } ).catch( error => {
+                    console.log('ERROR', error)
+                 })
+            })
+         })
 
         res.status(201).json({
             ok: true,
@@ -51,14 +65,13 @@ const readMember = async( req, res = response ) => {
 
     let member = await Member.find().skip(startIndex).limit(limit)
     .populate('user', ' name surname email title image biography location ')
-    .populate('profiles','name')
+    .populate('profiles')
     .populate('knowledges','name active')
     .populate('expertise','tool score')
     .populate('expertise.tool')
     .populate('colleagues','user score')
     .populate('colleagues.user')
 
-    console.log(member)
     res.json({
         ok: true,
         member,
@@ -147,12 +160,17 @@ const deleteMember = async( req, res = response ) => {
             })
         }
 
+        // Delete in Profiles  
+        await Profile.updateMany(
+            { members : memberId },
+            { $pull: { members: memberId } }
+            ).then( (res) => console.log('Profile', res))
 
         // Delete in Teams 
         await Team.updateMany(
             { members : memberId },
             { $pull: { members: memberId } }
-            )
+            ).then( (res) => console.log('Team' , res))
 
         await Member.findByIdAndDelete( memberId )
 
@@ -164,7 +182,8 @@ const deleteMember = async( req, res = response ) => {
     } catch (error) {
         res.status(500).json({
             ok: false,
-            msg: 'Por favor, hable con el administrador'
+            msg: 'Por favor, hable con el administrador',
+            error: error
         })
     }
 

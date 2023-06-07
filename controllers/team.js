@@ -1,12 +1,13 @@
 const { response } = require('express')
 
 const Team = require('../models/Team')
+const Member = require('../models/Member')
 
 
 // Create Team
 const createTeam = async( req, res = response ) => {
 
-    const { name  } = req.body
+    const { name , members } = req.body
 
     try {
 
@@ -20,6 +21,22 @@ const createTeam = async( req, res = response ) => {
         }
 
         team = new Team( req.body )
+        // Actualizar los equipos dentro de un miembro
+        Team.findOne(team).populate('members')
+        .then( (team) => { 
+                members.map( (memberId) => {
+                Member.findByIdAndUpdate(
+                        memberId,
+                        { $push: { teams: team._id } },
+                        { new: true }
+                    ).then( updatedTeam => {
+                        console.log('OK', updatedTeam)
+                    } ).catch( error => {
+                        console.log('ERROR', error)
+                    })
+                })
+            })
+         
 
         await team.save()
 
@@ -142,8 +159,8 @@ const deleteTeam = async( req, res = response ) => {
         }
 
 
-        // Delete in Members 
-        await Members.updateMany(
+        // Delete in Member
+        await Member.updateMany(
             { teams : teamId },
             { $pull: { teams: teamId } }
             )

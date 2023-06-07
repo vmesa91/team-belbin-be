@@ -10,7 +10,7 @@ const MemberSchema = Schema({
     },
 
     profiles: {
-        type: [ Schema.Types.ObjectId ],
+        type: [ Schema.Types.ObjectId ] ,
         ref: 'Profile',
         required: true
     },
