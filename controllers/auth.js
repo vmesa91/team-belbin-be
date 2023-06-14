@@ -38,6 +38,7 @@ const loginUser =  async( req, res = response ) => {
             name: user.name,
             surname: user.surname,
             email: user.email,
+            image: user.image,
             token,
             msg: 'Login Correcto'
         })
@@ -55,7 +56,15 @@ const loginUser =  async( req, res = response ) => {
 
 const createUser = async( req, res = response) => { 
     
-    const { name, surname, email , password } = req.body
+    const { email , password } = req.body
+
+    const imageId = Math.floor(Math.random() * 25) 
+
+    const dataUser = {
+        ...req.body, 
+        image: `/assets/images/avatars/avatar_${ imageId }.jpg`
+    }
+
     
     try {
         
@@ -68,7 +77,7 @@ const createUser = async( req, res = response) => {
             })
         }
         
-        user = new User( req.body )
+        user = new User( dataUser )
 
         // Encriptar contraseña
         const salt = bcrypt.genSaltSync()
@@ -84,6 +93,7 @@ const createUser = async( req, res = response) => {
             name: user.name,
             surname: user.surname,
             email: user.email,
+            image: user.image,
             token,
             msg: 'Usuario creado correctamente'
         })

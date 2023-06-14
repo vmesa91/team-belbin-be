@@ -9,8 +9,8 @@ const MemberSchema = Schema({
         required: true
     },
 
-    profiles: {
-        type: [ Schema.Types.ObjectId ] ,
+    profile: {
+        type: Schema.Types.ObjectId ,
         ref: 'Profile',
         required: true
     },
@@ -44,7 +44,7 @@ const MemberSchema = Schema({
     },
 
     language: {
-        type: [ String ],
+        type: Schema.Types.Array ,
         required: true
     },
 
@@ -60,11 +60,6 @@ const MemberSchema = Schema({
 
 });
 
-MemberSchema.method('toJSON', function() {
-    const { __v, _id, ...object } = this.toObject()
-    object.id = _id
-    return object;
- })
 
 module.exports = model( 'Member', MemberSchema)
 

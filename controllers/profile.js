@@ -20,9 +20,22 @@ const createProfile = async( req, res = response ) => {
             })
         }
 
-        profile = new Profile( req.body )
+        const resp = await Profile.create(req.body)
 
-        await profile.save()
+        // RESPUESTA POPULADA
+        profile = await Profile.findById( resp._id )
+            .populate('roles','name active')
+            .populate('tools','name active')
+            .populate('members','user profile belbinRol expertise colleagues knowledges language')
+            .populate('members.user')
+            .populate('members.profile')
+            .populate('members.belbinRol')
+            .populate('members.expertise')
+            .populate('members.expertise.tool')
+            .populate('members.colleagues')
+            .populate('members.colleagues.user')
+            .populate('members.knowledges')
+            .populate('members.language')
 
         res.status(201).json({
             ok: true,
@@ -42,13 +55,18 @@ const createProfile = async( req, res = response ) => {
 // Read Profile
 const readProfiles = async( req, res = response ) => {
 
-    const { page, limit } = req.query
-
-    const startIndex = (page - 1) * limit
-
-    let profiles = await Profile.find().skip(startIndex).limit(limit)
+    let profiles = await Profile.find()
     .populate('roles','name active')
     .populate('tools','name active')
+    .populate('members', 'user')
+    .populate({
+        path: 'members',
+        populate: {
+            path: 'user'
+        }
+       
+    })
+
 
     res.json({
         ok: true,
@@ -123,7 +141,7 @@ const manageProfiles = async( req, res = response ) => {
 
     try {
 
-        let members = await Member.find({ profiles: profileId }).select('user')
+        let members = await Member.find({ profile: profileId }).select('user')
         let profile = await Profile.findById( profileId ).select('id name roles tools')
 
         if (!profile) {
@@ -201,9 +219,9 @@ const deleteProfile = async( req, res = response ) => {
         }
 
         // Delete in Members 
-        await Member.updateMany(
-            { profiles : profileId },
-            { $pull: { profiles: profileId } }
+        await Member.updateOne(
+            { profile : profileId },
+            { $pull: { profile: profileId } }
             )
 
         await Profile.findByIdAndDelete( profileId )

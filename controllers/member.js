@@ -8,8 +8,8 @@ const Team = require('../models/Team')
 // Create Member
 const createMember = async( req, res = response ) => {
 
-    const { user , profiles } = req.body
-    console.log(profiles)
+    const { user , profile } = req.body
+    console.log(req.body)
 
     try {
 
@@ -22,22 +22,31 @@ const createMember = async( req, res = response ) => {
             })
         }   
 
-        member = await Member.create(req.body)
+        const resp = await Member.create(req.body)
+
+        // RESPUESTA POPULADA
+        member = await Member.findById( resp._id )
+            .populate('profile')
+            .populate('user')
+            .populate('knowledges','name active')
+            .populate('expertise')
+            .populate('expertise.tool')
+            .populate('colleagues')
+            .populate('colleagues.user')
+
 
         // Actualizar los miembros dentro de un perfil
-        Member.findOne(member).populate('profiles')
+        Member.findOne(resp).populate('profile')
        .then( (member) => { 
-            profiles.map( (profileId) => {
-               Profile.findByIdAndUpdate(
-                    profileId,
-                    { $push: { members: member._id } },
-                    { new: true }
-                ).then( updatedProfile => {
-                    console.log('OK', updatedProfile)
-                 } ).catch( error => {
-                    console.log('ERROR', error)
-                 })
-            })
+            Profile.findByIdAndUpdate(
+                profile,
+                { $push: { members: member._id } },
+                { new: true }
+            ).then( updatedProfile => {
+                console.log('OK', updatedProfile)
+                } ).catch( error => {
+                console.log('ERROR', error)
+                })     
          })
 
         res.status(201).json({
@@ -64,12 +73,12 @@ const readMember = async( req, res = response ) => {
     const startIndex = (page - 1) * limit
 
     let member = await Member.find().skip(startIndex).limit(limit)
-    .populate('user', ' name surname email title image biography location ')
-    .populate('profiles')
+    .populate('profile')
+    .populate('user')
     .populate('knowledges','name active')
-    .populate('expertise','tool score')
+    .populate('expertise')
     .populate('expertise.tool')
-    .populate('colleagues','user score')
+    .populate('colleagues')
     .populate('colleagues.user')
 
     res.json({
@@ -161,7 +170,7 @@ const deleteMember = async( req, res = response ) => {
         }
 
         // Delete in Profiles  
-        await Profile.updateMany(
+        await Profile.updateOne(
             { members : memberId },
             { $pull: { members: memberId } }
             ).then( (res) => console.log('Profile', res))
