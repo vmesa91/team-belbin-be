@@ -187,7 +187,22 @@ const updateProfile = async( req, res = response ) => {
             ...req.body
         }
 
-        const updateProfile = await Profile.findByIdAndUpdate( profileId, newDataProfile, { new: true } )
+        let updateProfile = await Profile.findByIdAndUpdate( profileId, newDataProfile, { new: true } )
+
+        // RESPUESTA POPULADA
+        updateProfile = await Profile.findById( profileId )
+            .populate('roles','name active')
+            .populate('tools','name active')
+            .populate('members','user profile belbinRol expertise colleagues knowledges language')
+            .populate('members.user')
+            .populate('members.profile')
+            .populate('members.belbinRol')
+            .populate('members.expertise')
+            .populate('members.expertise.tool')
+            .populate('members.colleagues')
+            .populate('members.colleagues.user')
+            .populate('members.knowledges')
+            .populate('members.language')
 
         res.json({
             ok: true,

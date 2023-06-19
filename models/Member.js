@@ -53,8 +53,8 @@ const MemberSchema = Schema({
         required: true
     },
 
-    team: {
-        type: Schema.Types.ObjectId,
+    teams: {
+        type: [ Schema.Types.ObjectId ],
         ref: 'Team'
     }
 

@@ -27,7 +27,7 @@ const createTeam = async( req, res = response ) => {
                 members.map( (memberId) => {
                 Member.findByIdAndUpdate(
                         memberId,
-                        { $push: { teams: team._id } },
+                        { $push: { team: teams._id } },
                         { new: true }
                     ).then( updatedTeam => {
                         console.log('OK', updatedTeam)
