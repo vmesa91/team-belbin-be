@@ -14,7 +14,7 @@ const TeamSchema = Schema({
 
     leader: {
         type: Schema.Types.ObjectId,
-        ref: 'Member',
+        ref: 'User',
         required: true
     },
 
@@ -37,7 +37,7 @@ const TeamSchema = Schema({
     },
 
     language: {
-        type: [ String ],
+        type: Schema.Types.Array ,
         required: true
     },
 

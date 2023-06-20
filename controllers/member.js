@@ -80,6 +80,7 @@ const readMember = async( req, res = response ) => {
     .populate('expertise.tool')
     .populate('colleagues')
     .populate('colleagues.user')
+    .populate('team')
 
     res.json({
         ok: true,
