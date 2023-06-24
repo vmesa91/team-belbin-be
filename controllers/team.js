@@ -38,6 +38,22 @@ const createTeam = async( req, res = response ) => {
                 })
             })
          
+        // RESPUESTA POPULADA
+        team = await Team.findById( resp._id )
+        .populate('leader')
+        .populate('roles','name active')
+        .populate('tools','name active')
+        .populate('knowledges','name active')
+        .populate({
+            path: 'members',
+            populate: [
+              { path: 'user' }, // Popula la referencia 'user' del miembro con los datos del usuario
+              { path: 'profile' }, // Popula la referencia 'user' del miembro con los datos del usuario
+              { path: 'expertise.tool' }, // Popula la referencia 'tool' de 'expertise' con los datos de la herramienta
+              { path: 'colleagues.user' }, // Popula la referencia 'user' de 'colleagues' con los datos del usuario
+              { path: 'knowledges' } // Popula la referencia 'knowledges' del miembro con los datos de los conocimientos
+            ]
+          })
 
         res.status(201).json({
             ok: true,
@@ -121,7 +137,7 @@ const updateTeam = async( req, res = response ) => {
     const teamId = req.params.id
 
     try {
-        let team = await Team.findById( teamId )
+        let team = await Team.findById( teamId )        
 
         if (!team) {
             res.status(404).json({
@@ -135,6 +151,20 @@ const updateTeam = async( req, res = response ) => {
         }
 
         const updateTeam = await Team.findByIdAndUpdate( teamId, newDataTeam, { new: true } )
+        .populate('leader')
+        .populate('roles','name active')
+        .populate('tools','name active')
+        .populate('knowledges','name active')
+        .populate({
+            path: 'members',
+            populate: [
+              { path: 'user' }, // Popula la referencia 'user' del miembro con los datos del usuario
+              { path: 'profile' }, // Popula la referencia 'user' del miembro con los datos del usuario
+              { path: 'expertise.tool' }, // Popula la referencia 'tool' de 'expertise' con los datos de la herramienta
+              { path: 'colleagues.user' }, // Popula la referencia 'user' de 'colleagues' con los datos del usuario
+              { path: 'knowledges' } // Popula la referencia 'knowledges' del miembro con los datos de los conocimientos
+            ]
+          })
 
         res.json({
             ok: true,
@@ -145,6 +175,7 @@ const updateTeam = async( req, res = response ) => {
     } catch (error) {
         res.status(500).json({
             ok: false,
+            error: error,
             msg: 'Por favor, hable con el administrador'
         })
     }

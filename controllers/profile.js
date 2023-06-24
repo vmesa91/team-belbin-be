@@ -67,7 +67,6 @@ const readProfiles = async( req, res = response ) => {
        
     })
 
-
     res.json({
         ok: true,
         profiles,
@@ -104,69 +103,6 @@ const readProfileId = async( req, res = response ) => {
         })
     }
 }
-
-// Read Tools to Profile by Id
-const readToolsByProfileId = async(req, res = response) => {
-
-    const profileId = req.params.id
-
-    try {
-        let profile = await Profile.findById( profileId ).select("id tools name description")
-
-        if (!profile) {
-            res.status(404).json({
-                ok: false,
-                msg: 'El Profile no existe por ese Id'
-            })
-        }
-
-        res.json({
-            ok: true,
-            profile,
-            msg: 'El profile fue leído correctamente'
-        })
-
-    } catch (error) {
-        res.status(500).json({
-            ok: false,
-            msg: 'Por favor, hable con el administrador'
-        })
-    }
-    
-}
-
-const manageProfiles = async( req, res = response ) => {
-    
-    const profileId = req.params.id
-
-    try {
-
-        let members = await Member.find({ profile: profileId }).select('user')
-        let profile = await Profile.findById( profileId ).select('id name roles tools')
-
-        if (!profile) {
-            res.status(404).json({
-                ok: false,
-                msg: 'El Profile no existe por ese Id'
-            })
-        }
-
-        res.json({
-            ok: true,
-            profile,
-            members,
-            msg: 'El profile fue leído correctamente'
-        })
-
-    } catch (error) {
-        res.status(500).json({
-            ok: false,
-            msg: 'Por favor, hable con el administrador'
-        })
-    }
-
-}
-
 
 // Update Profile
 const updateProfile = async( req, res = response ) => {
@@ -256,12 +192,11 @@ const deleteProfile = async( req, res = response ) => {
 }
 
 
+
 module.exports = {
     createProfile,
     readProfiles,
     readProfileId,
-    readToolsByProfileId,
-    manageProfiles,
     updateProfile,
     deleteProfile
     

@@ -6,7 +6,7 @@
 const { Router } = require('express')
 const { check } = require('express-validator')
 
-const { createMember , readMember, readMemberId, updateMember, deleteMember } = require('../controllers/member')
+const { createMember , readMember, readMemberId, updateMember, deleteMember, getRolesBelbin } = require('../controllers/member')
 const { fieldValidator } = require('../middlewares/field-validator')
 const { jwtValidator } = require('../middlewares/jwt-validator')
 
@@ -41,6 +41,14 @@ router.get(
    // 2. Middlewares
    // 3. Controller
    readMember)
+
+// Read RolesBelbin
+router.get(
+   // 1. Endpoint Path
+   '/rolesBelbin',
+   // 2. Middlewares
+   // 3. Controller
+   getRolesBelbin)
 
 // Read Member by Id
 router.get(

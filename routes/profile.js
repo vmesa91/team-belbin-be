@@ -6,7 +6,7 @@
 const { Router } = require('express')
 const { check } = require('express-validator')
 
-const { createProfile , readProfiles, readProfileId, readToolsByProfileId, manageProfiles, updateProfile, deleteProfile } = require('../controllers/profile')
+const { createProfile , readProfiles, readProfileId, updateProfile, deleteProfile, getProfilesPopular } = require('../controllers/profile')
 const { fieldValidator } = require('../middlewares/field-validator')
 const { jwtValidator } = require('../middlewares/jwt-validator')
 
@@ -47,24 +47,6 @@ router.get(
    // 3. Controller
    readProfileId)
 
-// Read Tools to Profile by Id
-router.get(
-   // 1. Endpoint Path
-   '/getTools/:id',
-   // 2. Middlewares
-   // 3. Controller
-   readToolsByProfileId)
-
-
-// Manage Profile
-router.get(
-   // 1. Endpoint Path
-   '/manageProfiles/:id',
-   // 2. Middlewares
-   // 3. Controller
-   manageProfiles)
-
-
 // Update Profile
 router.put(
    // 1. Endpoint Path
@@ -72,7 +54,6 @@ router.put(
    // 2. Middlewares
    // 3. Controller
    updateProfile)
-
 
 
 // Delete Profile
@@ -84,7 +65,4 @@ router.delete(
    deleteProfile)
 
 
-
-
-   manageProfiles
 module.exports = router;

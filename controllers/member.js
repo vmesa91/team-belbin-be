@@ -3,6 +3,7 @@ const { response } = require('express')
 const Member = require('../models/Member')
 const Profile = require('../models/Profile')
 const Team = require('../models/Team')
+const { classifyBelbin } = require('../helpers/classifyBelbin')
 
 
 // Create Member
@@ -119,7 +120,6 @@ const readMemberId = async( req, res = response ) => {
     }
 }
 
-
 // Update Member
 const updateMember = async( req, res = response ) => {
 
@@ -140,6 +140,14 @@ const updateMember = async( req, res = response ) => {
         }
 
         const updateMember = await Member.findByIdAndUpdate( memberId, newDataMember, { new: true } )
+            .populate('profile')
+            .populate('user')
+            .populate('knowledges','name active')
+            .populate('expertise')
+            .populate('expertise.tool')
+            .populate('colleagues')
+            .populate('colleagues.user')
+            .populate('team')
 
         res.json({
             ok: true,
@@ -199,10 +207,27 @@ const deleteMember = async( req, res = response ) => {
 
 }
 
+// Get Roles de Belbin
+ const getRolesBelbin = async( req, res = response ) => {
+
+    let members = await Member.find()
+    .populate('belbinRol')
+
+    const result = classifyBelbin(members)
+
+    res.json({
+        ok: true,
+        result,
+        msg: 'Los roles fueron leídos correctamente'
+    })
+
+}
+
 module.exports = {
     createMember,
     readMember,
     readMemberId,
+    getRolesBelbin,
     updateMember,
     deleteMember
     
