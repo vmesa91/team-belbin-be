@@ -129,6 +129,8 @@ const updateRole = async( req, res = response ) => {
 // Delete Role
 const deleteRole = async( req, res = response ) => {
 
+    console.log(req.params)
+
     const roleId = req.params.id
 
     try {
@@ -163,6 +165,7 @@ const deleteRole = async( req, res = response ) => {
     } catch (error) {
         res.status(500).json({
             ok: false,
+            error,
             msg: 'Por favor, hable con el administrador'
         })
     }

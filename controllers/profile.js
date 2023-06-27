@@ -2,6 +2,7 @@ const { response } = require('express')
 
 const Profile = require('../models/Profile')
 const Member = require('../models/Member')
+const { mostPopularProfiles } = require('../helpers/mostPopularProfiles')
 
 
 // Create Profile
@@ -67,9 +68,12 @@ const readProfiles = async( req, res = response ) => {
        
     })
 
+    const mostProfiles = mostPopularProfiles(profiles)
+
     res.json({
         ok: true,
         profiles,
+        mostProfiles,
         msg: 'Los perfiles fueron leídos correctamente'
     })
 
