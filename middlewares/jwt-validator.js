@@ -32,7 +32,8 @@ const jwtValidator = ( req, res = response, next ) => {
 
         return res.status(401).json({
             ok: false,
-            msg: 'Token inválido'    
+            error,
+            msg: 'Token inválido : Porfavor, recargue la página web'
         })
         
     }

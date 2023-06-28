@@ -15,7 +15,7 @@ const loginUser =  async( req, res = response ) => {
         if (!user) {
             return res.status(400).json({
                 ok: false,
-                msg: 'El user o contraseña son incorrectos'
+                msg: 'El usuario o contraseña son incorrectos'
             })
         }
         
