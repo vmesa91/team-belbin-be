@@ -1,6 +1,8 @@
 const { response } = require('express')
 
 const Tool = require('../models/Tool')
+const Profile = require('../models/Profile')
+const Team = require('../models/Team')
 
 
 // Create Tool
@@ -128,8 +130,9 @@ const deleteTool= async( req, res = response ) => {
 
     const toolId = req.params.id
 
-    try {
+   
         let tool = await Tool.findById( toolId )
+       
 
         if (!tool) {
             res.status(404).json({
@@ -137,19 +140,20 @@ const deleteTool= async( req, res = response ) => {
                 msg: 'La herramienta/tecnología no existe por ese Id'
             })
         }
+    
+        try{
 
         // Delete in Profiles 
         await Profile.updateMany(
             { tools : toolId },
             { $pull: { tools: toolId } }
          )
-         
+
          // Delete in Team
          await Team.updateMany(
              { tools : toolId },
              { $pull: { tools: toolId } }
           )
-
 
         await Tool.findByIdAndDelete( toolId )
 
@@ -164,7 +168,7 @@ const deleteTool= async( req, res = response ) => {
             error,
             msg: 'Por favor, hable con el administrador'
         })
-    }
+    } 
 
 }
 

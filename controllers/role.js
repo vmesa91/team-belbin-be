@@ -129,8 +129,6 @@ const updateRole = async( req, res = response ) => {
 // Delete Role
 const deleteRole = async( req, res = response ) => {
 
-    console.log(req.params)
-
     const roleId = req.params.id
 
     try {

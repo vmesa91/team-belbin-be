@@ -1,6 +1,8 @@
 const { response } = require('express')
 
 const Knowledge = require('../models/Knowledge')
+const Member = require('../models/Member')
+const Team = require('../models/Team')
 
 
 // Create Knowledge
