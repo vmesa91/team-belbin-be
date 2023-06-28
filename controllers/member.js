@@ -10,7 +10,6 @@ const { classifyBelbin } = require('../helpers/classifyBelbin')
 const createMember = async( req, res = response ) => {
 
     const { user , profile } = req.body
-    console.log(req.body)
 
     try {
 
