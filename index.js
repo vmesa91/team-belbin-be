@@ -29,6 +29,11 @@ app.use('/api/profile', require('./routes/profile'))
 app.use('/api/member', require('./routes/member'))
 app.use('/api/team', require('./routes/team'))
 
+
+app.get('*', ( req, res ) => {
+    res.sendFile( __dirname + '/public/index.html' );
+})
+
 // Listen requests
 app.listen( process.env.PORT, () => {
     console.log(`Servidor corriendo en puerto ${ 4000 }`)
